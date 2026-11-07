@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isStaff() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/staff/$(request.auth.uid));
+    }
+
+    match /players/{phone} {
+      allow get: if request.auth != null;        // kiosk checks one number
+      allow list: if isStaff();                   // only staff see everyone
+      allow create: if request.auth != null;      // register a new player
+      allow update: if request.auth != null
+        && resource.data.status == 'playing';     // save the result once
+      allow delete: if isStaff();                 // staff "Reset player data"
+    }
+
+    match /staff/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600" width="1600" height="1600">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9C7A2E"/>
+      <stop offset="0.5" stop-color="#F3DC9A"/>
+      <stop offset="1" stop-color="#9C7A2E"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1600" fill="#111214"/>
+  <g fill="#1E2024" stroke="#3A3D44" stroke-width="6">
+    <rect x="12" y="12" width="376" height="376" rx="24"/><rect x="412" y="12" width="376" height="376" rx="24"/><rect x="812" y="12" width="376" height="376" rx="24"/><rect x="1212" y="12" width="376" height="376" rx="24"/>
+    <rect x="12" y="412" width="376" height="376" rx="24"/><rect x="412" y="412" width="376" height="376" rx="24"/><rect x="812" y="412" width="376" height="376" rx="24"/><rect x="1212" y="412" width="376" height="376" rx="24"/>
+    <rect x="12" y="812" width="376" height="376" rx="24"/><rect x="412" y="812" width="376" height="376" rx="24"/><rect x="812" y="812" width="376" height="376" rx="24"/><rect x="1212" y="812" width="376" height="376" rx="24"/>
+    <rect x="12" y="1212" width="376" height="376" rx="24"/><rect x="412" y="1212" width="376" height="376" rx="24"/><rect x="812" y="1212" width="376" height="376" rx="24"/><rect x="1212" y="1212" width="376" height="376" rx="24"/>
+  </g>
+  <g fill="url(#g)" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="170" text-anchor="middle" dominant-baseline="central">
+    <text x="200" y="200">1</text><text x="600" y="200">2</text><text x="1000" y="200">3</text><text x="1400" y="200">4</text>
+    <text x="200" y="600">5</text><text x="600" y="600">6</text><text x="1000" y="600">7</text><text x="1400" y="600">8</text>
+    <text x="200" y="1000">9</text><text x="600" y="1000">10</text><text x="1000" y="1000">11</text><text x="1400" y="1000">12</text>
+    <text x="200" y="1400">13</text><text x="600" y="1400">14</text><text x="1000" y="1400">15</text><text x="1400" y="1400">16</text>
+  </g>
+  <text x="800" y="800" fill="#F4F1EA" fill-opacity="0.9" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="120" text-anchor="middle" dominant-baseline="central" letter-spacing="8">BYD</text>
+</svg>

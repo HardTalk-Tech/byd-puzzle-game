@@ -6,21 +6,33 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "scrambles": "node scripts/generate-scrambles.mjs --count 500 --optimal 16 --min-misplaced 13 --seed 2026 --out data/scrambles.json",
+    "scrambles:verify": "node scripts/generate-scrambles.mjs --verify data/scrambles.json",
+    "images": "node scripts/convert-car-images.mjs",
+    "icons": "node scripts/generate-icons.mjs",
+    "staff:create": "node scripts/create-staff-user.mjs"
   },
   "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "firebase": "^13.2.0",
+    "motion": "^14.10.1",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
-    "@types/node": "^20",
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^22.20.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^5.1.0"
   }
 }
