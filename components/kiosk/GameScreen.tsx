@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HintBar } from "@/components/hud/HintBar";
+import { PrizeBanner } from "@/components/hud/PrizeBanner";
 import { MoveCounter } from "@/components/hud/MoveCounter";
 import { TargetCard } from "@/components/hud/TargetCard";
 import { TimeChip } from "@/components/hud/TimeChip";
@@ -140,10 +141,14 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
         }
         top={
           <>
-            <div className="h-[60%]">
+            <div className="h-[50%]">
               <TargetCard modelName={car.name} image={image} onPeekChange={setPeeking} />
             </div>
-            <div className="flex h-[32%] items-stretch gap-[2.5cqw] pt-[1.6cqw]">
+            {/* Short prize reminder, visible the whole game. */}
+            <div className="flex h-[14%] items-center justify-center pt-[1.4cqw]">
+              <PrizeBanner />
+            </div>
+            <div className="flex h-[28%] items-stretch gap-[2.5cqw] pt-[1.4cqw]">
               <TimeChip clock={clock} className="flex-[1.15]" />
               <MoveCounter moves={moves} className="flex-1" />
               <StatChip

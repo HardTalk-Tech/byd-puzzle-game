@@ -1,4 +1,4 @@
-# Rebuild the BYD – puzzle kiosk
+# Build Your Dreams – BYD puzzle kiosk
 
 Portrait touch-screen kiosk game for the BYD Sri Lanka showroom event: a visitor
 registers (name + 10-digit phone, one play per number), rebuilds a random BYD

@@ -6,7 +6,7 @@ import scrambleData from "@/data/scrambles.json";
  * smaller timing and layout values chosen during development.
  */
 export const gameConfig = {
-  gameTitle: "Rebuild the BYD",
+  gameTitle: "Build Your Dreams",
   gridSize: 4,
   timeLimitSeconds: 120,
   /** Best possible score (from data/scrambles.json). Equal moves = PERFECT. */
@@ -20,7 +20,19 @@ export const gameConfig = {
   swipeThresholdRatio: 0.18,
   swapDurationMs: 200,
   nameMaxLength: 30,
-  soundEnabled: false,
+  soundEnabled: true,
+} as const;
+
+/**
+ * Prize places shown on the win popup. A finished game always has an even
+ * number of moves (each swap flips the tiles' parity), so places go up in
+ * steps of 2: 16 = 1st, 18 = 2nd, 20 = 3rd, 22 = 4th, 24 = 5th.
+ */
+export const rewardConfig = {
+  places: 5,
+  movesPerPlace: 2,
+  /** Places 1–3 get a special medal. */
+  podiumPlaces: 3,
 } as const;
 
 /** Smaller interaction and animation values (chosen during development). */
@@ -88,4 +100,4 @@ export const PHONE_DIGITS = 10;
 export const KIOSK_ID = process.env.NEXT_PUBLIC_KIOSK_ID || "game-kiosk-1";
 
 /** App version (short commit SHA on Vercel, "dev" locally). */
-export const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || "dev";
+export const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || "Live";

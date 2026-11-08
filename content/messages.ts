@@ -4,7 +4,7 @@
  */
 export const messages = {
   start: {
-    title: "Rebuild the BYD",
+    title: "Build Your Dreams",
     subtitle: "Swap the tiles. Rebuild the car. Beat the clock!",
     steps: ["Swipe a tile", "Rebuild the car", "Beat 2 minutes"],
     cta: "Tap to play",
@@ -29,6 +29,14 @@ export const messages = {
       "Tip: hold the small picture to see it bigger.",
       "Tip: start with the corners!",
     ],
+    /** Always visible during play. Keep it 3–4 words. */
+    prizeHint: "Fewer moves, bigger prize!",
+  },
+  /** Win popup place badge: "{place}" becomes 1st, 2nd … */
+  place: {
+    badge: "{place} place",
+    /** Short cheer under the badge, by place (1st … 5th). */
+    cheers: ["Champion!", "Superstar!", "On the podium!", "Great drive!", "Nice driving!"],
   },
   perfect: { title: "Perfect drive!", body: "16 moves – the best score possible! You're a true BYD master!" },
   completed: { title: "You did it!", body: "Car rebuilt! Great driving!", best: "Best possible: 16 moves" },
