@@ -27,7 +27,7 @@ export const messages = {
     tips: [
       "Tip: gold edges mean the tile is in the right place!",
       "Tip: hold the small picture to see it bigger.",
-      "Tip: start with the corners!",
+      "Tip: move the farthest tiles first!",
     ],
     /** Always visible during play. Keep it 3–4 words. */
     prizeHint: "Fewer moves, bigger prize!",
