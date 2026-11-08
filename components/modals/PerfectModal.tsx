@@ -5,6 +5,7 @@ import { GoldConfetti } from "@/components/effects/GoldConfetti";
 import { LightSweep } from "@/components/effects/LightSweep";
 import { TrophyIcon } from "@/components/icons/TrophyIcon";
 import { ModalShell } from "@/components/modals/ModalShell";
+import { PlaceBadge } from "@/components/modals/PlaceBadge";
 import { StatChip } from "@/components/ui/StatChip";
 import { TabularNumber } from "@/components/ui/TabularNumber";
 import { messages } from "@/content/messages";
@@ -23,6 +24,7 @@ export function PerfectModal({ moves, timeMs, onOk }: PerfectModalProps) {
       label={messages.perfect.title}
       onOk={onOk}
       overlay={<GoldConfetti mode="perfect" />}
+      badge={<PlaceBadge place={1} />}
       icon={
         <motion.div
           initial={{ scale: 0, rotate: -20 }}
@@ -45,7 +47,8 @@ export function PerfectModal({ moves, timeMs, onOk }: PerfectModalProps) {
           <span className="gold-text">{messages.perfect.title}</span>
         </motion.span>
       }
-      body={messages.perfect.body}
+      // The "1st place · Champion!" badge replaces the longer sentence.
+      body={null}
       stats={
         <>
           <StatChip label={messages.labels.moves} value={<TabularNumber value={moves} />} tone="gold" size="xl" className="flex-1 py-[2cqw]" />

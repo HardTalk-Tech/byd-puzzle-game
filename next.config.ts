@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 /** Short commit SHA on Vercel, "dev" locally. Used for the service worker cache name. */
-const APP_VERSION = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "dev";
+const APP_VERSION = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "Live";
 
 const nextConfig: NextConfig = {
   env: {

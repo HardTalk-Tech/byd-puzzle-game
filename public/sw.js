@@ -1,4 +1,4 @@
-/* Rebuild the BYD – hand-written service worker (section 12.2).
+/* Build Your Dreams – hand-written service worker (section 12.2).
  *
  * Registered in production only as /sw.js?v=<APP_VERSION>. The version is
  * part of the cache name, so every deploy starts a fresh cache and the old

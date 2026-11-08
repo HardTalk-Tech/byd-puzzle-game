@@ -207,7 +207,14 @@ export function KioskApp() {
           <PerfectModal key="perfect" moves={result.moves} timeMs={result.timeMs} onOk={nextPlayer} />
         )}
         {result?.outcome === "completed" && (
-          <CompletedModal key="completed" moves={result.moves} timeMs={result.timeMs} onOk={nextPlayer} />
+          <CompletedModal
+            key="completed"
+            moves={result.moves}
+            timeMs={result.timeMs}
+            carImage={session?.image}
+            carName={session?.car.name}
+            onOk={nextPlayer}
+          />
         )}
         {result?.outcome === "timeout" && <TimeUpModal key="timeup" moves={result.moves} onOk={nextPlayer} />}
       </AnimatePresence>
