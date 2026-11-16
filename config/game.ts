@@ -23,16 +23,25 @@ export const gameConfig = {
   soundEnabled: true,
 } as const;
 
+export type GiftId = "umbrella" | "bag" | "cap" | "pen";
+
 /**
- * Prize places shown on the win popup. A finished game always has an even
- * number of moves (each swap flips the tiles' parity), so places go up in
- * steps of 2: 16 = 1st, 18 = 2nd, 20 = 3rd, 22 = 4th, 24 = 5th.
+ * Places and gifts shown on the win popup. Every game finished within the
+ * time gets a place. A finished game always has an even number of moves
+ * (each swap flips the tiles' parity), so places go up in steps of 2:
+ * 16 = 1st, 18 = 2nd, 20 = 3rd … 26 = 6th, 28 = 7th, and so on.
  */
 export const rewardConfig = {
-  places: 5,
   movesPerPlace: 2,
-  /** Places 1–3 get a special medal. */
+  /** Places 1–3 get a special trophy / medal. */
   podiumPlaces: 3,
+  /** Gift for each place: the first tier whose `maxPlace` covers it. The last tier catches every other finish. */
+  gifts: [
+    { maxPlace: 3, gift: "umbrella" },
+    { maxPlace: 6, gift: "bag" },
+    { maxPlace: 10, gift: "cap" },
+    { maxPlace: Infinity, gift: "pen" },
+  ] satisfies { maxPlace: number; gift: GiftId }[],
 } as const;
 
 /** Smaller interaction and animation values (chosen during development). */
@@ -93,8 +102,9 @@ export const fxConfig = {
   maxDevicePixelRatio: 1.5,
 } as const;
 
-/** Phone numbers: exactly this many digits. */
-export const PHONE_DIGITS = 10;
+/** Phone numbers: 9 or 10 digits. */
+export const PHONE_MIN_DIGITS = 9;
+export const PHONE_MAX_DIGITS = 10;
 
 /** Kiosk identifier saved with every player. */
 export const KIOSK_ID = process.env.NEXT_PUBLIC_KIOSK_ID || "game-kiosk-1";

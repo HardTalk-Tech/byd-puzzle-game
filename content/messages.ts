@@ -16,7 +16,7 @@ export const messages = {
     start: "Start game",
     errors: {
       nameRequired: "Please type your name to start!",
-      phoneLength: "Phone numbers need 10 digits. Please check yours!",
+      phoneLength: "Phone numbers need 9 or 10 digits. Please check yours!",
     },
   },
   reveal: { intro: "Your car is…", go: "GO!" },
@@ -35,8 +35,22 @@ export const messages = {
   /** Win popup place badge: "{place}" becomes 1st, 2nd … */
   place: {
     badge: "{place} place",
-    /** Short cheer under the badge, by place (1st … 5th). */
+    /** Short cheer under the badge, by place (1st … 5th); later places use `cheerOther`. */
     cheers: ["Champion!", "Superstar!", "On the podium!", "Great drive!", "Nice driving!"],
+    cheerOther: "Well done!",
+  },
+  /** Gift reveal on the win popup (gifts by place are set in config/game.ts → rewardConfig). */
+  gift: {
+    /** Sticker stamped on the gift card. */
+    unlocked: "Unlocked!",
+    names: { umbrella: "Umbrella", bag: "Bag", cap: "Cap", pen: "Pen" },
+    /** Playful line under each gift name. Keep it 3–4 words. */
+    taglines: {
+      umbrella: "Rain-proof champion!",
+      bag: "Pack your dreams!",
+      cap: "Hats off to you!",
+      pen: "Sign of a winner!",
+    },
   },
   perfect: { title: "Perfect drive!", body: "16 moves – the best score possible! You're a true BYD master!" },
   completed: { title: "You did it!", body: "Car rebuilt! Great driving!", best: "Best possible: 16 moves" },
@@ -110,6 +124,8 @@ export const messages = {
       moves: "Moves",
       time: "Time",
       perfect: "Perfect",
+      place: "Place",
+      gift: "Gift",
     },
     statusNames: { playing: "Playing", completed: "Completed", timeout: "Time up" },
     perfectBadge: "PERFECT",

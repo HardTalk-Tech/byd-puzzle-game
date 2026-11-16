@@ -6,12 +6,13 @@ import { GoldConfetti } from "@/components/effects/GoldConfetti";
 import { LightSweep } from "@/components/effects/LightSweep";
 import { MedalIcon } from "@/components/icons/MedalIcon";
 import { PuzzleIcon } from "@/components/icons/PuzzleIcon";
+import { GiftCard } from "@/components/modals/GiftCard";
 import { ModalShell } from "@/components/modals/ModalShell";
 import { PlaceBadge } from "@/components/modals/PlaceBadge";
 import { StatChip } from "@/components/ui/StatChip";
 import { TabularNumber } from "@/components/ui/TabularNumber";
 import { messages } from "@/content/messages";
-import { isPodium, placeForMoves } from "@/lib/puzzle/placing";
+import { giftForPlace, isPodium, placeForMoves } from "@/lib/puzzle/placing";
 import { formatDuration } from "@/lib/utils/format";
 
 interface CompletedModalProps {
@@ -24,9 +25,9 @@ interface CompletedModalProps {
 }
 
 /**
- * Solved, in more than the best possible number of moves. 2nd and 3rd
- * place get a silver / bronze medal; otherwise the rebuilt car is shown
- * (4th–5th also get a place badge).
+ * Solved, in more than the best possible number of moves. Every finish
+ * gets a place and a gift. 2nd and 3rd place get a silver / bronze medal;
+ * later places show the rebuilt car.
  */
 export function CompletedModal({ moves, timeMs, carImage, carName, onOk }: CompletedModalProps) {
   const place = placeForMoves(moves);
@@ -38,6 +39,7 @@ export function CompletedModal({ moves, timeMs, carImage, carName, onOk }: Compl
       onOk={onOk}
       overlay={<GoldConfetti mode={podium ? "perfect" : "burst"} />}
       badge={place !== null ? <PlaceBadge place={place} /> : undefined}
+      gift={place !== null ? <GiftCard gift={giftForPlace(place)} /> : undefined}
       icon={
         podium ? (
           <motion.div

@@ -54,20 +54,22 @@ describe("buildPlayersCsv", () => {
     base,
     { ...base, phone: "0779999999", name: 'Nimal "Speedy", Jr', status: "timeout", moves: 40, timeMs: 120_000, perfect: false },
     { ...base, phone: "0700000000", status: "playing", moves: undefined, timeMs: undefined, perfect: undefined },
+    { ...base, phone: "712345678", moves: 30, timeMs: 95_000, perfect: false },
   ]);
 
   it("starts with a UTF-8 BOM and uses CRLF", () => {
     expect(csv.startsWith(CSV_BOM)).toBe(true);
-    expect(csv.split("\r\n")).toHaveLength(5); // header + 3 rows + trailing empty
+    expect(csv.split("\r\n")).toHaveLength(6); // header + 4 rows + trailing empty
   });
 
   it("has the table columns and formatted values", () => {
-    const [header, first, second, third] = csv.slice(1).split("\r\n");
-    expect(header).toBe("Date & time,Name,Phone,Car model,Status,Moves,Time,Perfect");
-    expect(first).toBe('2026-11-07 10:00:05,Kasun Perera,="0712345678",BYD Atto 3,Completed,16,1:12,Yes');
+    const [header, first, second, third, fourth] = csv.slice(1).split("\r\n");
+    expect(header).toBe("Date & time,Name,Phone,Car model,Status,Moves,Time,Place,Gift,Perfect");
+    expect(first).toBe('2026-11-07 10:00:05,Kasun Perera,="0712345678",BYD Atto 3,Completed,16,1:12,1st,Umbrella,Yes');
     expect(second).toContain('"Nimal ""Speedy"", Jr"');
-    expect(second).toContain("Time up,40,2:00,No");
-    expect(third).toContain("Playing,,,No");
+    expect(second).toContain("Time up,40,2:00,,,No"); // time-up: no place, no gift
+    expect(third).toContain("Playing,,,,,No");
+    expect(fourth).toBe('2026-11-07 10:00:05,Kasun Perera,="712345678",BYD Atto 3,Completed,30,1:35,8th,Cap,No');
   });
 
   it("formats dates in Sri Lanka time", () => {

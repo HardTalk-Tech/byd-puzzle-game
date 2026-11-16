@@ -5,6 +5,8 @@ import { messages } from "@/content/messages";
 import type { PlayerRecord } from "@/lib/types";
 import { formatDateTime, formatDuration } from "@/lib/utils/format";
 import { formatPhone } from "@/lib/utils/phone";
+import { GiftIcon } from "@/components/icons/GiftIcon";
+import { ordinal, rewardForPlayer } from "@/lib/puzzle/placing";
 
 type Filter = "all" | "completed" | "perfect" | "timeout";
 
@@ -65,10 +67,10 @@ export function ResultsTable({ players }: ResultsTableProps) {
       </div>
 
       <div className="glass-panel overflow-x-auto rounded-2xl">
-        <table className="w-full min-w-[760px] text-left text-sm">
+        <table className="w-full min-w-[900px] text-left text-sm">
           <thead className="border-b border-graphite-500 text-xs tracking-wide text-mist uppercase">
             <tr>
-              {[c.date, c.name, c.phone, c.model, c.status, c.moves, c.time, c.perfect].map((h) => (
+              {[c.date, c.name, c.phone, c.model, c.status, c.moves, c.time, c.place, c.gift, c.perfect].map((h) => (
                 <th key={h} className="px-4 py-3 font-semibold">
                   {h}
                 </th>
@@ -76,7 +78,9 @@ export function ResultsTable({ players }: ResultsTableProps) {
             </tr>
           </thead>
           <tbody>
-            {rows.map((p) => (
+            {rows.map((p) => {
+              const reward = rewardForPlayer(p);
+              return (
               <tr
                 key={p.phone}
                 className={`border-b border-graphite-700 last:border-0 ${
@@ -90,6 +94,17 @@ export function ResultsTable({ players }: ResultsTableProps) {
                 <td className="px-4 py-2.5 whitespace-nowrap">{messages.staff.statusNames[p.status]}</td>
                 <td className="font-display tabular px-4 py-2.5 font-bold">{p.moves ?? "–"}</td>
                 <td className="font-display tabular px-4 py-2.5">{p.timeMs === undefined ? "–" : formatDuration(p.timeMs)}</td>
+                <td className="font-display px-4 py-2.5 font-bold text-gold-300">{reward ? ordinal(reward.place) : "–"}</td>
+                <td className="px-4 py-2.5">
+                  {reward ? (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-gold-400/50 bg-graphite-800 py-0.5 pr-3 pl-1.5 font-semibold whitespace-nowrap text-ivory">
+                      <GiftIcon gift={reward.gift} className="h-5 w-5" />
+                      {messages.gift.names[reward.gift]}
+                    </span>
+                  ) : (
+                    "–"
+                  )}
+                </td>
                 <td className="px-4 py-2.5">
                   {p.perfect && (
                     <span className="gold-fill font-display rounded-full px-2.5 py-1 text-[11px] font-black text-ink">
@@ -98,10 +113,11 @@ export function ResultsTable({ players }: ResultsTableProps) {
                   )}
                 </td>
               </tr>
-            ))}
+              );
+            })}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-10 text-center text-mist">
+                <td colSpan={10} className="px-4 py-10 text-center text-mist">
                   {players.length === 0 ? messages.staff.empty : messages.staff.noMatches}
                 </td>
               </tr>

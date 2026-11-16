@@ -8,7 +8,7 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { TextField } from "@/components/ui/TextField";
-import { gameConfig, PHONE_DIGITS } from "@/config/game";
+import { gameConfig, PHONE_MAX_DIGITS } from "@/config/game";
 import { messages } from "@/content/messages";
 import { useStatusTrigger } from "@/hooks/useStatusTrigger";
 import { formatName, isValidName } from "@/lib/utils/name";
@@ -67,7 +67,7 @@ export function RegisterScreen({ checking, onSubmit }: RegisterScreenProps) {
 
   const typeDigit = (d: string) => {
     setErrors((e) => ({ ...e, phone: null }));
-    setPhone((p) => (p.length >= PHONE_DIGITS ? p : p + d));
+    setPhone((p) => (p.length >= PHONE_MAX_DIGITS ? p : p + d));
   };
   const clearPhone = () => setPhone("");
   const deleteDigit = () => setPhone((p) => p.slice(0, -1));
