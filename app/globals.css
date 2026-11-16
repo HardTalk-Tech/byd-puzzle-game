@@ -413,6 +413,24 @@
     animation: hand-swipe 2.2s ease-in-out infinite;
   }
 
+  /* Slowly turning gold rays behind the revealed gift. */
+  .gift-rays {
+    position: absolute;
+    inset: -30%;
+    border-radius: 50%;
+    background: repeating-conic-gradient(from 0deg, rgba(243, 220, 154, 0.38) 0deg 9deg, transparent 9deg 30deg);
+    -webkit-mask-image: radial-gradient(circle, #000 18%, transparent 68%);
+    mask-image: radial-gradient(circle, #000 18%, transparent 68%);
+    animation: gift-rays-turn 14s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes gift-rays-turn {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   .gold-flash {
     pointer-events: none;
     position: absolute;
@@ -508,6 +526,7 @@
 @media (prefers-reduced-motion: reduce) {
   .light-sweep,
   .gold-text-sweep,
+  .gift-rays,
   .hex-layer,
   .hand-swipe,
   .tile-chevron,

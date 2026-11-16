@@ -15,7 +15,7 @@ export function PlaceBadge({ place }: { place: number }) {
   const style = isPodium(place)
     ? `${PODIUM_STYLES[place - 1]} glow`
     : "border-2 border-gold-400/70 bg-graphite-800 text-gold-300";
-  const cheer = messages.place.cheers[place - 1];
+  const cheer = messages.place.cheers[place - 1] ?? messages.place.cheerOther;
   return (
     <motion.div
       initial={{ scale: 0.4, opacity: 0 }}
@@ -26,7 +26,7 @@ export function PlaceBadge({ place }: { place: number }) {
       <span className={`font-display rounded-full px-[5cqw] py-[1cqw] text-k-lg font-black ${style}`}>
         {messages.place.badge.replace("{place}", ordinal(place))}
       </span>
-      {cheer && <span className="font-display text-k-sm font-bold text-ivory">{cheer}</span>}
+      <span className="font-display text-k-sm font-bold text-ivory">{cheer}</span>
     </motion.div>
   );
 }

@@ -4,11 +4,13 @@ import { motion } from "motion/react";
 import { GoldConfetti } from "@/components/effects/GoldConfetti";
 import { LightSweep } from "@/components/effects/LightSweep";
 import { TrophyIcon } from "@/components/icons/TrophyIcon";
+import { GiftCard } from "@/components/modals/GiftCard";
 import { ModalShell } from "@/components/modals/ModalShell";
 import { PlaceBadge } from "@/components/modals/PlaceBadge";
 import { StatChip } from "@/components/ui/StatChip";
 import { TabularNumber } from "@/components/ui/TabularNumber";
 import { messages } from "@/content/messages";
+import { giftForPlace } from "@/lib/puzzle/placing";
 import { formatDuration } from "@/lib/utils/format";
 
 interface PerfectModalProps {
@@ -25,6 +27,7 @@ export function PerfectModal({ moves, timeMs, onOk }: PerfectModalProps) {
       onOk={onOk}
       overlay={<GoldConfetti mode="perfect" />}
       badge={<PlaceBadge place={1} />}
+      gift={<GiftCard gift={giftForPlace(1)} />}
       icon={
         <motion.div
           initial={{ scale: 0, rotate: -20 }}

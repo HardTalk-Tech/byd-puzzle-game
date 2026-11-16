@@ -1,4 +1,5 @@
 import { messages } from "@/content/messages";
+import { ordinal, rewardForPlayer } from "@/lib/puzzle/placing";
 import type { PlayerRecord } from "@/lib/types";
 import { formatDateTime, formatDuration, todayInColombo } from "@/lib/utils/format";
 
@@ -34,10 +35,13 @@ export const PLAYER_CSV_COLUMNS = [
   messages.staff.columns.status,
   messages.staff.columns.moves,
   messages.staff.columns.time,
+  messages.staff.columns.place,
+  messages.staff.columns.gift,
   messages.staff.columns.perfect,
 ];
 
 export function playerToCsvRow(p: PlayerRecord): string {
+  const reward = rewardForPlayer(p);
   return [
     escapeCsvField(formatDateTime(p.clientCreatedAt)),
     escapeCsvField(p.name),
@@ -46,6 +50,8 @@ export function playerToCsvRow(p: PlayerRecord): string {
     escapeCsvField(messages.staff.statusNames[p.status] ?? p.status),
     escapeCsvField(p.moves ?? ""),
     escapeCsvField(p.timeMs === undefined ? "" : formatDuration(p.timeMs)),
+    escapeCsvField(reward ? ordinal(reward.place) : ""),
+    escapeCsvField(reward ? messages.gift.names[reward.gift] : ""),
     escapeCsvField(p.perfect ? "Yes" : "No"),
   ].join(",");
 }

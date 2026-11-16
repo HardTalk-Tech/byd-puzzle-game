@@ -4,13 +4,18 @@ import { formatPhone, isValidPhone, normalizePhone } from "@/lib/utils/phone";
 import { TimeoutError, withTimeout } from "@/lib/utils/withTimeout";
 
 describe("phone validation", () => {
-  it("accepts exactly 10 digits", () => {
+  it("accepts 10 digits", () => {
     expect(isValidPhone("0712345678")).toBe(true);
     expect(isValidPhone("1234567890")).toBe(true);
   });
 
-  it("rejects 9 and 11 digits", () => {
-    expect(isValidPhone("071234567")).toBe(false);
+  it("accepts 9 digits", () => {
+    expect(isValidPhone("712345678")).toBe(true);
+    expect(isValidPhone("071234567")).toBe(true);
+  });
+
+  it("rejects 8 and 11 digits", () => {
+    expect(isValidPhone("71234567")).toBe(false);
     expect(isValidPhone("07123456789")).toBe(false);
   });
 
@@ -29,6 +34,7 @@ describe("phone validation", () => {
 
   it("formats as 071 234 5678, also while typing", () => {
     expect(formatPhone("0712345678")).toBe("071 234 5678");
+    expect(formatPhone("712345678")).toBe("712 345 678");
     expect(formatPhone("07")).toBe("07");
     expect(formatPhone("07123")).toBe("071 23");
     expect(formatPhone("")).toBe("");
