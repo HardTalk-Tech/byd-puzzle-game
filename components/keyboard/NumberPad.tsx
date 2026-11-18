@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { BackspaceIcon } from "@/components/icons/BackspaceIcon";
 import { KeyButton } from "@/components/keyboard/KeyButton";
 import { messages } from "@/content/messages";
@@ -10,8 +11,8 @@ interface NumberPadProps {
   onBackspace: () => void;
 }
 
-/** 3×4 grid: 1–9, CLEAR, 0, ⌫. Huge keys. */
-export function NumberPad({ onDigit, onClear, onBackspace }: NumberPadProps) {
+/** 3×4 grid: 1–9, CLEAR, 0, ⌫. Huge keys. Memoized like LetterKeyboard. */
+export const NumberPad = memo(function NumberPad({ onDigit, onClear, onBackspace }: NumberPadProps) {
   return (
     <div className="mx-auto grid h-full w-[86%] grid-cols-3 grid-rows-4 gap-[1.6cqw]">
       {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
@@ -30,4 +31,4 @@ export function NumberPad({ onDigit, onClear, onBackspace }: NumberPadProps) {
       </KeyButton>
     </div>
   );
-}
+});

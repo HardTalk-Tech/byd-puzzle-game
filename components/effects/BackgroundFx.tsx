@@ -14,8 +14,12 @@ interface Particle {
 }
 
 interface BackgroundFxProps {
-  /** "light" during play: fewer particles. */
-  intensity?: "full" | "light";
+  /**
+   * "light" during play: fewer particles. "calm" while typing on the
+   * registration screen: everything stops, so slow kiosk PCs spend their
+   * time on the keyboard instead of the background.
+   */
+  intensity?: "full" | "light" | "calm";
 }
 
 function makeParticle(width: number, height: number, anywhere: boolean): Particle {
@@ -37,10 +41,15 @@ function makeParticle(width: number, height: number, anywhere: boolean): Particl
  */
 export function BackgroundFx({ intensity = "full" }: BackgroundFxProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const targetCount = useRef<number>(intensity === "full" ? fxConfig.particlesFull : fxConfig.particlesLight);
+  const targetCount = useRef<number>(intensity === "light" ? fxConfig.particlesLight : fxConfig.particlesFull);
+  const calm = useRef(intensity === "calm");
+  const controls = useRef<{ start: () => void; stop: () => void } | null>(null);
 
   useEffect(() => {
-    targetCount.current = intensity === "full" ? fxConfig.particlesFull : fxConfig.particlesLight;
+    calm.current = intensity === "calm";
+    if (intensity !== "calm") targetCount.current = intensity === "light" ? fxConfig.particlesLight : fxConfig.particlesFull;
+    if (calm.current) controls.current?.stop();
+    else controls.current?.start();
   }, [intensity]);
 
   useEffect(() => {
@@ -110,12 +119,18 @@ export function BackgroundFx({ intensity = "full" }: BackgroundFxProps) {
 
     const start = () => {
       cancelAnimationFrame(raf);
+      if (calm.current) return;
       if (reducedMotion) {
         draw(0);
         return;
       }
       last = performance.now();
       raf = requestAnimationFrame(step);
+    };
+
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      ctx.clearRect(0, 0, width, height);
     };
 
     const onVisibility = () => {
@@ -125,6 +140,7 @@ export function BackgroundFx({ intensity = "full" }: BackgroundFxProps) {
 
     resize();
     particles = Array.from({ length: targetCount.current }, () => makeParticle(width, height, true));
+    controls.current = { start, stop };
     start();
 
     const observer = new ResizeObserver(() => {
@@ -136,6 +152,7 @@ export function BackgroundFx({ intensity = "full" }: BackgroundFxProps) {
 
     return () => {
       cancelAnimationFrame(raf);
+      controls.current = null;
       observer.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
     };
@@ -143,7 +160,7 @@ export function BackgroundFx({ intensity = "full" }: BackgroundFxProps) {
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="hex-layer" />
+      <div className="hex-layer" data-paused={intensity === "calm"} />
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/60 to-transparent" />
     </div>
