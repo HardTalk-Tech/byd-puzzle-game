@@ -283,12 +283,25 @@
     transition: opacity 40ms ease-out;
   }
 
+  /* Gold flash layer; KeyButton plays it with the Web Animations API (no re-render). */
   .key-flash {
     position: absolute;
     inset: 0;
     pointer-events: none;
+    opacity: 0;
     background: radial-gradient(circle at center, rgba(243, 220, 154, 0.6), rgba(232, 200, 117, 0) 70%);
-    animation: key-flash 280ms ease-out forwards;
+    will-change: opacity;
+  }
+
+  /* Solid panel (no backdrop blur) for busy screens on slow kiosk GPUs. */
+  .glass-panel[data-solid="true"] {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(22, 23, 26, 0.94);
+  }
+
+  .hex-layer[data-paused="true"] {
+    animation-play-state: paused;
   }
 
   .key[data-variant="accent"] {

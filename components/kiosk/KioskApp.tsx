@@ -176,7 +176,11 @@ export function KioskApp() {
   const groupKey = inRound && session ? `round-${session.roundId}` : screen;
 
   return (
-    <KioskShell fxIntensity={inRound ? "light" : "full"} getPendingWrites={getPendingWrites}>
+    <KioskShell
+      // Registration: background paused so typing stays snappy on slow kiosk PCs.
+      fxIntensity={inRound ? "light" : screen === "register" ? "calm" : "full"}
+      getPendingWrites={getPendingWrites}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={groupKey}

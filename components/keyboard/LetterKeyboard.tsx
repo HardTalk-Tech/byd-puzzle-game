@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { BackspaceIcon } from "@/components/icons/BackspaceIcon";
 import { ChevronIcon } from "@/components/icons/ChevronIcon";
 import { KeyButton } from "@/components/keyboard/KeyButton";
@@ -14,8 +15,11 @@ interface LetterKeyboardProps {
   onNext: () => void;
 }
 
-/** QWERTY A–Z, wide SPACE, ⌫ and NEXT → (moves to the phone field). */
-export function LetterKeyboard({ onLetter, onSpace, onBackspace, onNext }: LetterKeyboardProps) {
+/**
+ * QWERTY A–Z, wide SPACE, ⌫ and NEXT → (moves to the phone field).
+ * Memoized: typing changes the field, not the keyboard, so it never re-renders.
+ */
+export const LetterKeyboard = memo(function LetterKeyboard({ onLetter, onSpace, onBackspace, onNext }: LetterKeyboardProps) {
   return (
     <div className="flex h-full flex-col gap-[1.2cqw]">
       {ROWS.map((row, i) => (
@@ -43,4 +47,4 @@ export function LetterKeyboard({ onLetter, onSpace, onBackspace, onNext }: Lette
       </div>
     </div>
   );
-}
+});

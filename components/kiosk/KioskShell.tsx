@@ -9,8 +9,8 @@ import { StatusTriggerContext } from "@/hooks/useStatusTrigger";
 
 interface KioskShellProps {
   children: ReactNode;
-  /** Lighter background effects during play. */
-  fxIntensity?: "full" | "light";
+  /** Lighter background effects during play; "calm" (paused) while typing. */
+  fxIntensity?: "full" | "light" | "calm";
   /** For the status panel. */
   getPendingWrites?: () => number;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LetterKeyboard } from "@/components/keyboard/LetterKeyboard";
 import { NumberPad } from "@/components/keyboard/NumberPad";
 import { BrandLogo } from "@/components/ui/BrandLogo";
@@ -39,13 +39,21 @@ export function RegisterScreen({ checking, onSubmit }: RegisterScreenProps) {
   const phoneValid = isValidPhone(phone);
   const canStart = nameValid && phoneValid;
 
-  const flagError = (f: Field) => {
+  // Latest typed name for the stable handlers below.
+  const nameRef = useRef(name);
+  useEffect(() => {
+    nameRef.current = name;
+  }, [name]);
+
+  // Key handlers are stable (useCallback + functional updates), so the
+  // memoized keyboards never re-render while typing – important on slow kiosk PCs.
+  const flagError = useCallback((f: Field) => {
     setErrors((e) => ({
       ...e,
       [f]: f === "name" ? messages.register.errors.nameRequired : messages.register.errors.phoneLength,
     }));
     setShake((s) => ({ ...s, [f]: s[f] + 1 }));
-  };
+  }, []);
 
   const selectField = (next: Field) => {
     // Leaving a half-typed phone number: tell them gently.
@@ -53,24 +61,26 @@ export function RegisterScreen({ checking, onSubmit }: RegisterScreenProps) {
     setField(next);
   };
 
-  const typeLetter = (letter: string) => {
-    setErrors((e) => ({ ...e, name: null }));
+  const typeLetter = useCallback((letter: string) => {
+    setErrors((e) => (e.name === null ? e : { ...e, name: null }));
     setName((n) => (n.length >= gameConfig.nameMaxLength ? n : n + letter.toLowerCase()));
-  };
-  const typeSpace = () =>
-    setName((n) => (n.length === 0 || n.endsWith(" ") || n.length >= gameConfig.nameMaxLength ? n : n + " "));
-  const deleteLetter = () => setName((n) => n.slice(0, -1));
-  const goNext = () => {
-    if (!nameValid) return flagError("name");
+  }, []);
+  const typeSpace = useCallback(
+    () => setName((n) => (n.length === 0 || n.endsWith(" ") || n.length >= gameConfig.nameMaxLength ? n : n + " ")),
+    [],
+  );
+  const deleteLetter = useCallback(() => setName((n) => n.slice(0, -1)), []);
+  const goNext = useCallback(() => {
+    if (!isValidName(nameRef.current)) return flagError("name");
     setField("phone");
-  };
+  }, [flagError]);
 
-  const typeDigit = (d: string) => {
-    setErrors((e) => ({ ...e, phone: null }));
+  const typeDigit = useCallback((d: string) => {
+    setErrors((e) => (e.phone === null ? e : { ...e, phone: null }));
     setPhone((p) => (p.length >= PHONE_MAX_DIGITS ? p : p + d));
-  };
-  const clearPhone = () => setPhone("");
-  const deleteDigit = () => setPhone((p) => p.slice(0, -1));
+  }, []);
+  const clearPhone = useCallback(() => setPhone(""), []);
+  const deleteDigit = useCallback(() => setPhone((p) => p.slice(0, -1)), []);
 
   const submit = () => {
     if (checking) return;
@@ -114,7 +124,8 @@ export function RegisterScreen({ checking, onSubmit }: RegisterScreenProps) {
         <h1 className="font-display gold-text text-k-xl leading-tight font-black">{messages.register.heading}</h1>
       </header>
 
-      <GlassPanel className="mt-[1.5cqh] flex flex-col gap-[1.2cqh] px-[4.5cqw] pt-[2.2cqh] pb-[0.8cqh]">
+      {/* Solid (not blurred) panel: the text inside changes on every key press. */}
+      <GlassPanel data-solid="true" className="mt-[1.5cqh] flex flex-col gap-[1.2cqh] px-[4.5cqw] pt-[2.2cqh] pb-[0.8cqh]">
         <TextField
           label={messages.register.nameLabel}
           value={formatName(name) + (name.endsWith(" ") ? " " : "")}
