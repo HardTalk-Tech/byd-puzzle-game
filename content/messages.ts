@@ -43,13 +43,14 @@ export const messages = {
   gift: {
     /** Sticker stamped on the gift card. */
     unlocked: "Unlocked!",
-    names: { umbrella: "Umbrella", bag: "Bag", cap: "Cap", pen: "Pen" },
+    names: { umbrella: "Umbrella", bag: "Bag", cap: "Cap", pen: "Pen", sticker: "Sticker card" },
     /** Playful line under each gift name. Keep it 3–4 words. */
     taglines: {
       umbrella: "Rain-proof champion!",
       bag: "Pack your dreams!",
       cap: "Hats off to you!",
       pen: "Sign of a winner!",
+      sticker: "Stick with the winners!",
     },
   },
   perfect: { title: "Perfect drive!", body: "16 moves – the best score possible! You're a true BYD master!" },

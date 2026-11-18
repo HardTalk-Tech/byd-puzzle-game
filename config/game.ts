@@ -23,7 +23,7 @@ export const gameConfig = {
   soundEnabled: true,
 } as const;
 
-export type GiftId = "umbrella" | "bag" | "cap" | "pen";
+export type GiftId = "umbrella" | "bag" | "cap" | "pen" | "sticker";
 
 /**
  * Places and gifts shown on the win popup. Every game finished within the
@@ -40,7 +40,8 @@ export const rewardConfig = {
     { maxPlace: 3, gift: "umbrella" },
     { maxPlace: 6, gift: "bag" },
     { maxPlace: 10, gift: "cap" },
-    { maxPlace: Infinity, gift: "pen" },
+    { maxPlace: 15, gift: "pen" },
+    { maxPlace: Infinity, gift: "sticker" },
   ] satisfies { maxPlace: number; gift: GiftId }[],
 } as const;
 
