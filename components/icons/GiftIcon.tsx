@@ -5,7 +5,7 @@ import { GOLD_STOPS, useGradientId } from "@/components/icons/useGradientId";
 
 const SHADE = "#0A0A0B";
 
-/** Gold icon for each gift: umbrella, bag, cap, pen. */
+/** Gold icon for each gift: umbrella, bag, cap, pen, sticker card. */
 export function GiftIcon({ gift, className }: { gift: GiftId; className?: string }) {
   const id = useGradientId(`gift-${gift}`);
   const gold = `url(#${id})`;
@@ -50,6 +50,20 @@ export function GiftIcon({ gift, className }: { gift: GiftId; className?: string
           <circle cx="31" cy="14.5" r="3" fill={gold} />
           <path d="M6 43h34" stroke={SHADE} strokeOpacity=".3" strokeWidth="2" />
         </>
+      )}
+
+      {gift === "sticker" && (
+        <g transform="rotate(-8 32 32)">
+          {/* card with a peeling corner and a star sticker */}
+          <path d="M10 12a4 4 0 0 1 4-4h36a4 4 0 0 1 4 4v28L40 56H14a4 4 0 0 1-4-4V12Z" fill={gold} />
+          <path d="M54 40H44a4 4 0 0 0-4 4v12l14-16Z" fill="#FFF7DF" fillOpacity=".55" stroke={SHADE} strokeOpacity=".25" strokeWidth="1.2" />
+          <path
+            d="m30 17 3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1.1L30 17Z"
+            fill={SHADE}
+            fillOpacity=".5"
+          />
+          <path d="M16 46h14" stroke={SHADE} strokeOpacity=".3" strokeWidth="2.2" strokeLinecap="round" />
+        </g>
       )}
 
       {gift === "pen" && (

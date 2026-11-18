@@ -140,7 +140,10 @@ export function GiftCard({ gift }: { gift: GiftId }) {
             transition={{ delay: T.item + 0.15, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             <span
-              className={`font-display leading-none font-black whitespace-nowrap ${name.length > LONG_NAME ? "text-k-xl" : "text-k-2xl"}`}
+              className={`font-display leading-[0.95] font-black ${
+                // Two-word names ("Sticker card") wrap onto two lines; single words never break.
+                name.includes(" ") ? "whitespace-normal" : "whitespace-nowrap"
+              } ${name.length > LONG_NAME ? "text-k-xl" : "text-k-2xl"}`}
             >
               <SweepText period={3} delay={1.6}>
                 {name}

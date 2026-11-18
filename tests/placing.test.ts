@@ -26,15 +26,18 @@ describe("places", () => {
 });
 
 describe("gifts", () => {
-  it("1st–3rd umbrella, 4th–6th bag, 7th–10th cap, then pen", () => {
-    const gifts = Array.from({ length: 14 }, (_, i) => giftForPlace(i + 1));
+  it("1st–3rd umbrella, 4th–6th bag, 7th–10th cap, 11th–15th pen, then sticker card", () => {
+    const gifts = Array.from({ length: 17 }, (_, i) => giftForPlace(i + 1));
     expect(gifts).toEqual([
       "umbrella", "umbrella", "umbrella",
       "bag", "bag", "bag",
       "cap", "cap", "cap", "cap",
-      "pen", "pen", "pen", "pen",
+      ...Array(5).fill("pen"),
+      "sticker", "sticker",
     ]);
-    expect(giftForPlace(99)).toBe("pen");
+    expect(giftForPlace(15)).toBe("pen");
+    expect(giftForPlace(16)).toBe("sticker");
+    expect(giftForPlace(99)).toBe("sticker");
   });
 
   it("only games finished within the time get a place and gift", () => {
@@ -42,6 +45,8 @@ describe("gifts", () => {
     expect(rewardForPlayer({ status: "completed", moves: 26 })).toEqual({ place: 6, gift: "bag" });
     expect(rewardForPlayer({ status: "completed", moves: 34 })).toEqual({ place: 10, gift: "cap" });
     expect(rewardForPlayer({ status: "completed", moves: 36 })).toEqual({ place: 11, gift: "pen" });
+    expect(rewardForPlayer({ status: "completed", moves: 44 })).toEqual({ place: 15, gift: "pen" });
+    expect(rewardForPlayer({ status: "completed", moves: 46 })).toEqual({ place: 16, gift: "sticker" });
     expect(rewardForPlayer({ status: "timeout", moves: 20 })).toBeNull();
     expect(rewardForPlayer({ status: "playing" })).toBeNull();
   });
