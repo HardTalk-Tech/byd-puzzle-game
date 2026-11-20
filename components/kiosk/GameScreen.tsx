@@ -19,6 +19,7 @@ import type { Car } from "@/config/cars";
 import { gameConfig, uiConfig } from "@/config/game";
 import { messages } from "@/content/messages";
 import { useCountdown } from "@/hooks/useCountdown";
+import { usePeekPreview } from "@/hooks/usePeekPreview";
 import { useTimeouts } from "@/hooks/useTimeouts";
 import { isSolved, solvedBoard, swap } from "@/lib/puzzle/board";
 import type { Board, RoundResult, Scramble, SwapMove } from "@/lib/types";
@@ -42,7 +43,9 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
   const [merged, setMerged] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
   const [moveDuration, setMoveDuration] = useState<number>(gameConfig.swapDurationMs);
-  const [peeking, setPeeking] = useState(false);
+  // Big car-picture preview: tap = a few seconds, hold = while pressed.
+  const peek = usePeekPreview();
+  const [nudge, setNudge] = useState(false);
   // Dev-only debug mode (?debug=1). Never available in a production build.
   const [debug] = useState(
     () => DEBUG_AVAILABLE && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("debug") === "1",
@@ -81,6 +84,16 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
   useEffect(() => {
     clock.start();
   }, [clock]);
+
+  // Once per game, right after GO!: a hand taps the car picture to show it can be opened.
+  useEffect(() => {
+    const show = setTimeout(() => setNudge(true), uiConfig.peekNudgeDelayMs);
+    const hide = setTimeout(() => setNudge(false), uiConfig.peekNudgeDelayMs + uiConfig.peekNudgeMs);
+    return () => {
+      clearTimeout(show);
+      clearTimeout(hide);
+    };
+  }, []);
 
   const handleSwap = useCallback(
     (a: number, b: number) => {
@@ -128,6 +141,8 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
     remaining.forEach(([a, b], i) => schedule(() => handleSwap(a, b), gap * (i + 1)));
   };
 
+  // The preview only shows during play (never over the win / time-up sequence).
+  const peeking = peek.open && phase === "playing";
   const interactive = phase === "playing" && !autoSolving && !peeking;
 
   return (
@@ -142,22 +157,22 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
         top={
           <>
             <div className="h-[50%]">
-              <TargetCard modelName={car.name} image={image} onPeekChange={setPeeking} />
+              <TargetCard
+                modelName={car.name}
+                image={image}
+                onPressStart={peek.onPressStart}
+                onPressEnd={peek.onPressEnd}
+                onPressCancel={peek.onPressCancel}
+                nudge={nudge && phase === "playing"}
+              />
             </div>
             {/* Short prize reminder, visible the whole game. */}
-            <div className="flex h-[14%] items-center justify-center pt-[1.4cqw]">
+            <div className="flex h-[13%] items-center justify-center pt-[1.2cqw]">
               <PrizeBanner />
             </div>
-            <div className="flex h-[28%] items-stretch gap-[2.5cqw] pt-[1.4cqw]">
-              <TimeChip clock={clock} className="flex-[1.15]" />
-              <MoveCounter moves={moves} className="flex-1" />
-              <StatChip
-                label={messages.labels.best}
-                value={gameConfig.optimalMoves}
-                tone="gold"
-                size="sm"
-                className="flex-[0.7]"
-              />
+            {/* Timer centred above the board; moves and best are under the board. */}
+            <div className="flex h-[29%] items-stretch justify-center pt-[1.2cqw]">
+              <TimeChip clock={clock} className="w-[40%]" />
             </div>
             <div className="flex h-[8%] items-center pt-[1cqw]">
               <div className="h-[max(6px,1.1cqw)] w-full">
@@ -186,7 +201,9 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={{ duration: 0.18 }}
-                  className="gold-frame glow-strong pointer-events-none absolute inset-0 z-20"
+                  // Tapping the big picture closes it too.
+                  onPointerDown={peek.close}
+                  className="gold-frame glow-strong absolute inset-0 z-20 touch-none"
                 >
                   <Image
                     src={image}
@@ -201,6 +218,18 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
               )}
             </AnimatePresence>
           </>
+        }
+        belowBoard={
+          <div className="flex w-full items-stretch justify-center gap-[2.5cqw] pt-[1.2cqw]">
+            <MoveCounter moves={moves} className="w-[40%]" />
+            <StatChip
+              label={messages.labels.best}
+              value={gameConfig.optimalMoves}
+              tone="gold"
+              size="sm"
+              className="w-[26%]"
+            />
+          </div>
         }
         bottom={<HintBar />}
       />

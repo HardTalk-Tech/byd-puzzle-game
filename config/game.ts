@@ -53,6 +53,12 @@ export const uiConfig = {
   tapSelectionTimeoutMs: 4000,
   /** Timer display refresh. The timer itself uses performance.now(). */
   timerTickMs: 100,
+  /** Car picture preview: a tap shows it this long; a press longer than peekHoldMs is a hold (open until release). */
+  peekTapShowMs: 3_000,
+  peekHoldMs: 350,
+  /** One-time hand "tap here" nudge on the car picture after GO!. */
+  peekNudgeDelayMs: 500,
+  peekNudgeMs: 1_600,
   /** Rotate tips in the hint bar after this long, then every tipRotateMs. */
   hintTipsAfterMs: 10_000,
   tipRotateMs: 5_000,
@@ -103,7 +109,7 @@ export const fxConfig = {
   maxDevicePixelRatio: 1.5,
 } as const;
 
-/** Phone numbers: 9 or 10 digits. */
+/** Phone numbers: 10 digits when starting with 0, otherwise 9 digits. */
 export const PHONE_MIN_DIGITS = 9;
 export const PHONE_MAX_DIGITS = 10;
 

@@ -8,11 +8,11 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { TextField } from "@/components/ui/TextField";
-import { gameConfig, PHONE_MAX_DIGITS } from "@/config/game";
+import { gameConfig } from "@/config/game";
 import { messages } from "@/content/messages";
 import { useStatusTrigger } from "@/hooks/useStatusTrigger";
 import { formatName, isValidName } from "@/lib/utils/name";
-import { formatPhone, isValidPhone } from "@/lib/utils/phone";
+import { formatPhone, isValidPhone, phoneMaxLength } from "@/lib/utils/phone";
 
 type Field = "name" | "phone";
 
@@ -77,7 +77,8 @@ export function RegisterScreen({ checking, onSubmit }: RegisterScreenProps) {
 
   const typeDigit = useCallback((d: string) => {
     setErrors((e) => (e.phone === null ? e : { ...e, phone: null }));
-    setPhone((p) => (p.length >= PHONE_MAX_DIGITS ? p : p + d));
+    // Stops at 10 digits after a leading 0, otherwise at 9.
+    setPhone((p) => (p.length >= phoneMaxLength(p) ? p : p + d));
   }, []);
   const clearPhone = useCallback(() => setPhone(""), []);
   const deleteDigit = useCallback(() => setPhone((p) => p.slice(0, -1)), []);
