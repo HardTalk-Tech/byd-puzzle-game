@@ -426,6 +426,17 @@
     animation: hand-swipe 2.2s ease-in-out infinite;
   }
 
+  /* Timer colon: dims halfway through each second (restarted every second). */
+  .timer-colon {
+    animation: colon-tick 1s steps(1) 1;
+  }
+
+  @keyframes colon-tick {
+    0% { opacity: 1; }
+    50% { opacity: 0.25; }
+    100% { opacity: 0.25; }
+  }
+
   /* Slowly turning gold rays behind the revealed gift. */
   .gift-rays {
     position: absolute;
@@ -540,6 +551,7 @@
   .light-sweep,
   .gold-text-sweep,
   .gift-rays,
+  .timer-colon,
   .hex-layer,
   .hand-swipe,
   .tile-chevron,

@@ -14,10 +14,8 @@ import { RoundLayout } from "@/components/kiosk/RoundLayout";
 import { BoardFrame } from "@/components/puzzle/BoardFrame";
 import { PuzzleBoard } from "@/components/puzzle/PuzzleBoard";
 import { BrandLogo } from "@/components/ui/BrandLogo";
-import { StatChip } from "@/components/ui/StatChip";
 import type { Car } from "@/config/cars";
 import { gameConfig, uiConfig } from "@/config/game";
-import { messages } from "@/content/messages";
 import { useCountdown } from "@/hooks/useCountdown";
 import { usePeekPreview } from "@/hooks/usePeekPreview";
 import { useTimeouts } from "@/hooks/useTimeouts";
@@ -172,7 +170,7 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
             </div>
             {/* Timer centred above the board; moves and best are under the board. */}
             <div className="flex h-[29%] items-stretch justify-center pt-[1.2cqw]">
-              <TimeChip clock={clock} className="w-[40%]" />
+              <TimeChip clock={clock} className="w-[60%]" />
             </div>
             <div className="flex h-[8%] items-center pt-[1cqw]">
               <div className="h-[max(6px,1.1cqw)] w-full">
@@ -220,15 +218,8 @@ export function GameScreen({ car, image, scramble, onFinish }: GameScreenProps) 
           </>
         }
         belowBoard={
-          <div className="flex w-full items-stretch justify-center gap-[2.5cqw] pt-[1.2cqw]">
-            <MoveCounter moves={moves} className="w-[40%]" />
-            <StatChip
-              label={messages.labels.best}
-              value={gameConfig.optimalMoves}
-              tone="gold"
-              size="sm"
-              className="w-[26%]"
-            />
+          <div className="flex w-full items-stretch justify-center pt-[1.4cqw] pb-[0.4cqw]">
+            <MoveCounter moves={moves} best={gameConfig.optimalMoves} className="w-[82%]" />
           </div>
         }
         bottom={<HintBar />}
