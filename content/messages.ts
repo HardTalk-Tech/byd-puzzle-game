@@ -16,7 +16,7 @@ export const messages = {
     start: "Start game",
     errors: {
       nameRequired: "Please type your name to start!",
-      phoneLength: "Phone numbers need 9 or 10 digits. Please check yours!",
+      phoneLength: "Use 10 digits starting with 0, or 9 digits without the 0.",
     },
   },
   reveal: { intro: "Your car is…", go: "GO!" },
@@ -26,7 +26,7 @@ export const messages = {
     hint: "Swipe a tile to swap it with its neighbour",
     tips: [
       "Tip: gold edges mean the tile is in the right place!",
-      "Tip: hold the small picture to see it bigger.",
+      "Tip: tap the small picture to see it bigger.",
       "Tip: move the farthest tiles first!",
     ],
     /** Always visible during play. Keep it 3–4 words. */
