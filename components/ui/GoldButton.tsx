@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { useRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { LightSweep } from "@/components/effects/LightSweep";
 
 interface GoldButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
@@ -13,6 +13,13 @@ interface GoldButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
   softDisabled?: boolean;
   size?: "lg" | "xl";
   sweepDelay?: number;
+  /**
+   * Fires on touch-DOWN (like the keyboard keys) instead of on click, so a
+   * finger that slides slightly or a slow kiosk PC never loses the tap.
+   * Enter / Space on a focused button still work. Prefer this over onClick
+   * for buttons players tap on the kiosk.
+   */
+  onPress?: () => void;
 }
 
 const SIZES = {
@@ -21,7 +28,12 @@ const SIZES = {
   xl: "min-h-[max(64px,11cqw)] px-[8cqw] text-k-lg",
 };
 
-/** Gold gradient pill button with a light sweep and pressed state. */
+/**
+ * Gold gradient pill button with a light sweep and pressed state.
+ *
+ * The pressed look is set straight on the element (no React state), so a
+ * press never re-renders the button – important on slow kiosk PCs.
+ */
 export function GoldButton({
   children,
   breathe = false,
@@ -31,6 +43,7 @@ export function GoldButton({
   sweepDelay,
   disabled,
   className = "",
+  onPress,
   onPointerDown,
   onPointerUp,
   onPointerLeave,
@@ -38,22 +51,30 @@ export function GoldButton({
   type = "button",
   ...rest
 }: GoldButtonProps) {
-  const [pressed, setPressed] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const inactive = disabled || loading || softDisabled;
+  const canPress = !disabled && !loading;
+
+  const setPressed = (pressed: boolean) => {
+    if (buttonRef.current) buttonRef.current.dataset.pressed = String(pressed);
+  };
 
   return (
     <button
+      ref={buttonRef}
       type={type}
       disabled={disabled}
       aria-busy={loading || undefined}
       aria-disabled={softDisabled || undefined}
-      data-pressed={pressed && !inactive}
+      data-pressed="false"
       data-breathe={breathe}
       data-state={loading ? "loading" : "idle"}
       className={`gold-button font-display inline-flex items-center justify-center gap-[2cqw] font-bold ${SIZES[size]} ${className}`}
       onPointerDown={(e) => {
-        if (!inactive) setPressed(true);
         onPointerDown?.(e);
+        if (e.button !== 0) return; // ignore right / middle mouse buttons
+        if (!inactive) setPressed(true);
+        if (onPress && canPress) onPress();
       }}
       onPointerUp={(e) => {
         setPressed(false);
@@ -68,7 +89,15 @@ export function GoldButton({
         onPointerCancel?.(e);
       }}
       {...rest}
-      onClick={loading ? undefined : rest.onClick}
+      onClick={(e) => {
+        if (loading) return;
+        if (onPress) {
+          // Touch and mouse were handled on pointerdown; this only catches Enter / Space.
+          if (e.detail === 0) onPress();
+          return;
+        }
+        rest.onClick?.(e);
+      }}
     >
       {!inactive && <LightSweep delay={sweepDelay} />}
       {loading && <span className="spinner" aria-hidden />}

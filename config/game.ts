@@ -78,8 +78,10 @@ export const uiConfig = {
   /** Time up: tiles slide home, short pause, then the popup. */
   timeUpSolveMs: 800,
   timeUpPauseMs: 900,
-  /** Perfect popup repeats a small confetti burst this often. */
+  /** Perfect / podium popup repeats a small confetti burst this often… */
   perfectConfettiRepeatMs: 3_500,
+  /** …this many times in all (including the first big burst), then stops so slow kiosk PCs stay responsive. */
+  perfectConfettiBursts: 3,
   /** Hidden status panel: taps on the logo within the window. */
   statusTaps: 5,
   statusTapWindowMs: 3_000,

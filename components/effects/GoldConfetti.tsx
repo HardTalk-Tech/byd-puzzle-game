@@ -29,7 +29,13 @@ export function GoldConfetti({ mode }: GoldConfettiProps) {
     let interval: ReturnType<typeof setInterval> | undefined;
     if (mode === "perfect") {
       sides(110);
-      interval = setInterval(() => sides(35), uiConfig.perfectConfettiRepeatMs);
+      // A few repeats, not forever: endless confetti kept slow kiosk PCs busy while players tapped OK.
+      let bursts = 1;
+      interval = setInterval(() => {
+        sides(35);
+        bursts += 1;
+        if (bursts >= uiConfig.perfectConfettiBursts) clearInterval(interval);
+      }, uiConfig.perfectConfettiRepeatMs);
     } else {
       void fire({ ...base, particleCount: 130, spread: 110, startVelocity: 48, origin: { x: 0.5, y: 0.32 } });
     }

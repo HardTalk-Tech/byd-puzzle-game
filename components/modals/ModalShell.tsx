@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { GoldButton } from "@/components/ui/GoldButton";
 import { uiConfig } from "@/config/game";
 import { messages } from "@/content/messages";
@@ -35,6 +35,14 @@ export function ModalShell({ icon, title, body, stats, footnote, onOk, overlay, 
     return () => clearTimeout(t);
   }, []);
 
+  // OK fires once: a double tap, or a tap while the popup fades out, is ignored.
+  const closed = useRef(false);
+  const pressOk = () => {
+    if (!ready || closed.current) return;
+    closed.current = true;
+    onOk();
+  };
+
   return (
     <motion.div
       role="dialog"
@@ -44,13 +52,16 @@ export function ModalShell({ icon, title, body, stats, footnote, onOk, overlay, 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: uiConfig.modalEnterMs / 1000 }}
-      className="absolute inset-0 z-40 flex items-center justify-center bg-black/65 backdrop-blur-[6px]"
+      // No backdrop blur: re-blurring the whole screen every frame made OK feel laggy on slow kiosk PCs.
+      className="absolute inset-0 z-40 flex items-center justify-center bg-black/75"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.97 }}
         transition={{ duration: uiConfig.modalEnterMs / 1000, ease: [0.22, 1, 0.36, 1] }}
+        // Solid (not blurred) panel, like the registration form.
+        data-solid="true"
         className="glass-panel flex w-[86%] flex-col items-center gap-[2cqh] px-[6cqw] pt-[3.5cqh] pb-[3cqh] text-center"
       >
         <div className="flex min-h-[24cqw] items-center justify-center">{icon}</div>
@@ -60,7 +71,7 @@ export function ModalShell({ icon, title, body, stats, footnote, onOk, overlay, 
         {gift}
         {stats && <div className="flex w-full justify-center gap-[3cqw]">{stats}</div>}
         {footnote && <div className="text-k-xs font-semibold text-mist">{footnote}</div>}
-        <GoldButton size="xl" className="mt-[1cqh] w-full" softDisabled={!ready} onClick={() => ready && onOk()}>
+        <GoldButton size="xl" className="mt-[1cqh] w-full" softDisabled={!ready} onPress={pressOk}>
           {messages.ok}
         </GoldButton>
       </motion.div>
