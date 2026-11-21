@@ -177,8 +177,8 @@ export function KioskApp() {
 
   return (
     <KioskShell
-      // Registration: background paused so typing stays snappy on slow kiosk PCs.
-      fxIntensity={inRound ? "light" : screen === "register" ? "calm" : "full"}
+      // Registration and result popups: background paused so taps stay snappy on slow kiosk PCs.
+      fxIntensity={result !== null || screen === "register" ? "calm" : inRound ? "light" : "full"}
       getPendingWrites={getPendingWrites}
     >
       <AnimatePresence mode="wait">

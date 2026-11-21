@@ -83,14 +83,18 @@ export function RegisterScreen({ checking, onSubmit }: RegisterScreenProps) {
   const clearPhone = useCallback(() => setPhone(""), []);
   const deleteDigit = useCallback(() => setPhone((p) => p.slice(0, -1)), []);
 
+  // START fires on touch-down; this stops a quick double tap from submitting
+  // twice before `checking` re-renders. The form remounts after a duplicate popup.
+  const submitted = useRef(false);
   const submit = () => {
-    if (checking) return;
+    if (checking || submitted.current) return;
     if (!canStart) {
       if (!nameValid) flagError("name");
       if (!phoneValid) flagError("phone");
       setField(!nameValid ? "name" : "phone");
       return;
     }
+    submitted.current = true;
     onSubmit({ name: formatName(name), phone });
   };
 
@@ -147,7 +151,7 @@ export function RegisterScreen({ checking, onSubmit }: RegisterScreenProps) {
       </GlassPanel>
 
       <div className="flex flex-1 items-center justify-center">
-        <GoldButton size="xl" softDisabled={!canStart} loading={checking} onClick={submit} className="w-full">
+        <GoldButton size="xl" softDisabled={!canStart} loading={checking} onPress={submit} className="w-full">
           {messages.register.start}
         </GoldButton>
       </div>
